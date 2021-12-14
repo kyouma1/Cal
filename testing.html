@@ -1,0 +1,34 @@
+<html lang="en-US">
+    <link rel= "stylesheet" href="calculator.css">
+
+    <p id="output">√16 </p>
+    <div><button onclick="test()">sqrt</button></div>
+    <script>
+        function test(){
+            let temp = document.getElementById('output').textContent;
+            let currNr = [];
+            temp = Array.from(temp);
+            for (let i = 0; i < temp.length; i++) {
+                switch (temp[i]) {
+                    case '√':
+                        for (let j = i+1; j < 5; j++) {
+                        if(temp[j] ==' '||temp[j] =='')
+                            break;
+                        currNr.push(temp[j]);
+
+                        }
+                        break;
+                
+                    default:
+                        break;
+                }
+
+                
+            }
+            document.getElementById('output').innerText = Math.sqrt(currNr.join(''));
+        }
+        
+    </script>
+
+
+</html>

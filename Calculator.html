@@ -1,0 +1,423 @@
+<html lang="en-US">
+<link rel = "stylesheet" href = "calculator.css">
+<script>
+    function callFunc(){
+
+        var tag = document.createElement("button");
+        var text = document.createTextNode("kek");
+        tag.appendChild(text);
+        var elem = document.getElementsByTagName("body")[0];
+        elem.appendChild(tag);
+    }
+</script> 
+    <head>
+        <script>
+            window.onload = function(){
+                var val = 0;
+                document.getElementById('output').innerHTML = val;
+            }
+            //document.body.innerText="<div id=\"grid\">";
+        </script>
+        <pre>
+        <p id="output"><var>x</var></p>
+        </pre>
+        <p id = "rez"><var></var></p>
+        <div class = "grid">
+            <div><button onclick="symbol(' % ')">%</button></div>
+            <div><button onclick="symbol(' / ')">/</button></div>
+            <div><button onclick="symbol(' * ')">*</button></div>
+            <div><button onclick="symbol(' - ')">-</button></div>
+            
+            <div><button onclick="combine(1)">1</button></div>
+            <div><button onclick="combine(2)">2</button></div>
+            <div><button onclick="combine(3)">3</button></div>
+            <div><button onclick="symbol(' + ')">+</button></div>
+            <div><button onclick="combine(4)">4</button></div>
+            <div><button onclick="combine(5)">5</button></div>
+            <div><button onclick="combine(6)">6</button></div>
+            <div><button onclick="sqrt()">√</button></div>
+            <div><button onclick="combine(7)">7</button></div>
+            <div><button onclick="combine(8)">8</button></div>
+            <div><button onclick="combine(9)">9</button></div>
+            <div><button onclick="combine(9)">9</button></div>
+            <div><button onclick="dot()">.</button></div>
+            <div><button onclick="combine(0)">0</button></div>
+            <div><button onclick="clea()">c</button></div>      
+            <div><button onclick="changeVal()">+/-</button></div>
+            <button onclick="result()">=</button>
+
+            <script>  
+            var str = 0;
+            var dotValue = 1;
+            var prefix = 0; 
+            var root = 0;
+            var rez = [];
+            function result(){
+                var values = document.getElementById('output').textContent;
+                var equation = [];
+                var symbols = [];
+                var numbers = [];
+                var nrCounter = [];
+                var tempNr = 0;
+                var blankSpace = 0;
+
+                for (let i = 0; i < values.length; i++) {
+                    switch (values[i]) {
+                        case ' ':
+                            if(blankSpace == 0){
+                            equation.push(numbers);
+                            numbers = [];
+                            blankSpace = 1;
+                            }
+                            break;
+                        case '+':
+                            symbols.push('+');
+                            break;
+                        case '-':
+                            if(Number.isInteger(parseInt(values[i+1]))){
+                                numbers.push('-');
+                            }
+                            else if (values[i+1] == '√'){
+                                neg = 1;
+                                numbers.push('-');
+                            }
+                            else
+                            symbols.push('-');
+
+                            break;
+                        case '*':
+                            symbols.push('*');
+                            break;
+                        case '%':
+                            symbols.push('%');
+                            break;
+                        case '/':
+                            symbols.push('/');
+                            break;
+                        case '√':
+                            equation.push('√');
+                            break;
+                        default:
+                            
+                            blankSpace = 0;
+                            numbers.push(values[i]);
+                            tempNr = 0;
+                            
+                            break;  
+                    }
+                    
+                }
+                if(blankSpace == 0){
+                    equation.push(numbers);
+                }
+                var sqrt = 0, rez = '';
+                var nrArr = [];
+                for (let i = 0; i < values.length-1; i++) {
+                    if(values[i]=='√'&&values[i+1]=='-'){
+                        document.getElementById('rez').textContent = 'NaN';
+                        return;
+
+                    }
+
+                    
+                }
+                for (let i = 0; i < equation.length; i++) {
+                    for (let j = 0; j < equation[i].length; j++) {
+                        
+                        if(equation[i][j] == '√'){
+                            sqrt = 1;
+                            equation.splice(i,1)
+                            rez +=equation[i][j];
+                        }
+                        else
+                        rez +=equation[i][j];
+                    }
+                    if(sqrt == 1){
+                        if(rez[0] == '-'){
+                            rez = rez.slice(1,rez.length);
+                            nrArr.push('-'+Math.sqrt(rez));
+                            neg = 0;
+                        }
+                        else{
+                             nrArr.push(Math.sqrt(rez));
+                        }
+                        
+                    }
+                    else
+                    nrArr.push(rez);
+                    
+                    sqrt = 0;
+                    rez = '';
+                    
+                }
+                //symbolString = symbols               
+                // tempNr = 0;
+                for (let i = 0; i < symbols.length; i++) {
+                   let kek = symbols[i];
+                   switch (symbols[i]) {
+                       case '*':
+                           rez = nrArr[i] * nrArr[i+1];
+                           symbols.splice(i,1);
+                           nrArr.splice(i+1,1);
+
+                           nrArr[i] = rez;
+                           i--;
+
+                           break;
+                        case '/':
+                           rez = nrArr[i] / nrArr[i+1];
+                           symbols.splice(i,1);
+                           nrArr.splice(i+1,1);
+
+                           nrArr[i] = rez;
+                           i--;
+
+                        break;
+                        case '%':
+                           rez = nrArr[i] % nrArr[i+1];
+                           symbols.splice(i,1);
+                           nrArr.splice(i+1,1);
+
+                           nrArr[i] = rez;
+                           i--;
+
+
+                            break;
+                    
+                       default:
+                           break;
+                   }
+               }
+               for (let i = 0; i < symbol.length; i++) {
+                   switch (symbols[i]) {
+                       case '+':
+                           rez = parseFloat(nrArr[i]) + parseFloat(nrArr[i+1]);
+                           symbols.splice(i,1);
+                           nrArr.splice(i+1,1);
+
+                           nrArr[i] = rez;
+
+                           i--;
+                           break;
+                        case '-':
+                           rez = parseFloat(nrArr[i]) - parseFloat(nrArr[i+1]);
+                           symbols.splice(i,1);
+                           nrArr.splice(i+1,1);
+
+                           nrArr[i] = rez;
+
+                           i--;
+
+                        break;
+                    
+                       default:
+                           break;
+                   }
+            }
+            if(rez == ''){
+                rez = nrArr[0];
+            }
+            document.getElementById('rez').innerText = rez;
+        }
+            function sqrt(){
+                let x = document.getElementById('output').textContent;
+                let tempX1;
+                if(str == 0)
+                    return;
+                if(root == 0){
+                    for (let i = x.length; i >=0 ; i--) {
+                    if(i==0){
+                    tempX1 ='√' + x;
+                    root = 1;
+                    break;
+                    }
+                    else if(x[i]== ' '){
+                    tempX1 =x.slice(0,i+1) +'√' + x.slice(i+1);
+                    root = 1;
+                    break;
+                    //break;
+
+                    }
+                    
+                }
+                }
+                
+                else{
+                    for (let i = x.length; i >= 0; i--) {
+                        if(x[i] == '√'){
+                            if(i == 0){
+                          tempX1 = x.slice(i+1);
+                            }
+                            else{
+                          tempX1 = x.slice(0,i)+x.slice(i+1);
+
+                            }
+                            root = 0;
+                            break;
+                        }
+                        
+                    }
+                }
+                
+                
+                document.getElementById('output').textContent = tempX1;
+                result();
+            }
+            
+            function changeVal(){
+                let x = document.getElementById('output').textContent;
+                let tempX1;
+                if(str == 0)
+                    return;
+                if(prefix == 0)
+                for (let i = x.length; i >=0 ; i--) {
+                    if(i==0){
+                    tempX1 ='-' + x;
+                    prefix = 1;
+                    break;
+                   // x.splice(i,0,'-');
+
+                    }
+                    else if(x[i]== ' '){
+                    tempX1 =x.slice(0,i+1) +'-' + x.slice(i+1);
+                    prefix = 1;
+                    break;
+                    //break;
+
+                    }
+                    
+                }
+                else{
+                    for (let i = x.length; i >= 0; i--) {
+                        if(x[i] == '-'){
+                            if(i == 0){
+                                tempX1 = x.slice(i+1);
+
+                            }
+                            else{
+                                tempX1 = x.slice(0,i) + x.slice(i+1);
+                            }
+                            prefix = 0;
+                            break;
+                        }
+                        
+                    }
+                }
+
+                
+                document.getElementById('output').textContent = tempX1;
+                result();
+            }
+            document.addEventListener('keydown', function(event){
+                switch (event.keyCode) {
+                    case 96:
+                    combine(0);
+                        break;
+                    case 97:
+                    combine(1);
+                        break;
+                    case 98:
+                    combine(2);
+                        break;
+                    case 99:
+                    combine(3);
+                        break;
+                    case 100:
+                    combine(4);
+                        break;
+                    case 101:
+                    combine(5);
+                        break;
+                    case 102:
+                    combine(6);
+                        break;
+                    case 103:
+                    combine(7);
+                        break;
+                    case 104:
+                    combine(8);
+                        break;
+                    case 105:
+                    combine(9);
+                        break;
+                    case 13:
+                        
+                        break;
+                    case 111:
+                    symbol(' / ')
+                        break;
+                    case 106:
+                    symbol(' * ')
+                        break;
+                    case 109:
+                    symbol(' - ')
+                        break;
+                    case 107:
+                    symbol(' + ')
+                        break;
+                    case 110:
+                    dot()
+                        break;
+                    case 13:
+                        result();
+                    case 110:
+                        dot();
+                    default:
+                        break;
+                }
+
+            });
+            function dot(){
+                var val = document.getElementById('output').textContent;
+                str = 1;
+                if(dotValue ==0)
+                    return;
+                if(val[val.length-1] == ' '){
+                document.getElementById('output').textContent += '0.';
+                dotValue = 0;
+                    return;
+
+                }
+                dotValue = 0;
+                document.getElementById('output').textContent += '.';
+                result();
+                
+            }
+            function clea(){
+                root = 0;
+                prefix = 0;
+                str = 0;
+                dotValue = 1;
+                document.getElementById('output').textContent = 0;
+                result();
+            }
+            function symbol(sym){
+                dotValue = 1;
+                root = 0;
+                prefix = 0;
+                if( document.getElementById('output').textContent == 0)
+                    return;
+                var eq = document.getElementById('output').innerHTML;
+                if(eq.endsWith(' % ')||eq.endsWith(' * ')||eq.endsWith(' + ')||eq.endsWith(' / ')||eq.endsWith(' + ')||eq.endsWith(' - ')||eq.endsWith(' √ '))
+                {
+                    eq = eq.substring(0,eq.length - 3);
+                    document.getElementById('output').textContent = eq+sym;
+                }
+                else
+                document.getElementById('output').innerHTML += sym;
+            }
+
+            function combine(val){
+                if(str == 0){
+                    document.getElementById('output').innerHTML = val;
+                    str = 1;
+                    return;
+                }
+                document.getElementById('output').innerText += val;
+                
+                result();
+            }
+            </script>
+        </div> 
+    </head>
+</html>
